@@ -31,6 +31,7 @@ dependencies:
   flutter:
     sdk: flutter
   auto_route: ^9.2.2
+  json_annotation: ^4.9.0
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -41,7 +42,8 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   auto_route_generator: ^9.0.0
-  build_runner: ^2.4.12
+  build_runner: ^2.3.3
+  json_serializable: ^6.8.0
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -59,6 +61,7 @@ flutter:
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
+  generate: true
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
