@@ -1,7 +1,9 @@
+import 'package:auto_route/annotations.dart';
 import 'package:flutter/material.dart';
 
 import '../common/app_colors.dart';
 
+@RoutePage()
 class ProcessScreen extends StatefulWidget {
   const ProcessScreen({super.key});
 

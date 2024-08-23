@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 
-import 'pages/home_screen.dart';
+import 'router/app_router.dart';
 
 class WebsparkApp extends StatelessWidget {
-  const WebsparkApp({super.key});
+  WebsparkApp({super.key});
 
-
+  final _appRouter = AppRouter();
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       title: 'Flutter Demo',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
         useMaterial3: true,
       ),
-      home: const HomeScreen(),
+      routerConfig: _appRouter.config(),
     );
   }
 }

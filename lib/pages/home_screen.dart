@@ -1,7 +1,9 @@
+import 'package:auto_route/annotations.dart';
 import 'package:flutter/material.dart';
 
 import '../common/app_colors.dart';
 
+@RoutePage()
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -46,7 +48,8 @@ class _HomeScreenState extends State<HomeScreen> {
             Center(
               child: ConstrainedBox(
                 constraints: BoxConstraints(
-                    minWidth: MediaQuery.of(context).size.width * 0.9),
+                  minWidth: MediaQuery.of(context).size.width * 0.9,
+                ),
                 child: OutlinedButton(
                   onPressed: () {},
                   style: OutlinedButton.styleFrom(
@@ -55,7 +58,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       borderRadius: BorderRadius.circular(10.0),
                     ),
                     side: const BorderSide(
-                        width: 2, color: AppColors.cornerColor),
+                      width: 2,
+                      color: AppColors.cornerColor,
+                    ),
                   ),
                   child: const Text(
                     'Start counting process',
