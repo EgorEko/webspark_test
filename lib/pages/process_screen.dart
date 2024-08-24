@@ -1,6 +1,10 @@
-import 'package:auto_route/annotations.dart';
-import 'package:flutter/material.dart';
+import 'dart:math';
 
+import 'package:auto_route/auto_route.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../blocs/calculation_cubit/calculation_cubit.dart';
 import '../common/app_colors.dart';
 
 @RoutePage()
@@ -14,6 +18,8 @@ class ProcessScreen extends StatefulWidget {
 class _ProcessScreenState extends State<ProcessScreen> {
   @override
   Widget build(BuildContext context) {
+    const start = Point(3, 1);
+    const end = Point(0, 3);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColors.backgroundPrimary,
@@ -26,11 +32,14 @@ class _ProcessScreenState extends State<ProcessScreen> {
       body: Padding(
         padding: const EdgeInsets.only(top: 8, left: 8, right: 8, bottom: 30),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            const Text(
-              'All calculations has finished, you can send your results to server',
+            const Spacer(),
+            const Center(
+              child: Text(
+                'All calculations has finished, you can send your results to server',
+              ),
             ),
             const Divider(),
             const Spacer(),
@@ -40,7 +49,11 @@ class _ProcessScreenState extends State<ProcessScreen> {
                   minWidth: MediaQuery.of(context).size.width * 0.9,
                 ),
                 child: OutlinedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    context
+                        .read<CalculationCubit>()
+                        .calculateShortcut(start, end);
+                  },
                   style: OutlinedButton.styleFrom(
                     backgroundColor: AppColors.backgroundPrimary,
                     shape: RoundedRectangleBorder(

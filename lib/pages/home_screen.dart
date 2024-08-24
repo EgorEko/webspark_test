@@ -1,7 +1,8 @@
-import 'package:auto_route/annotations.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
 import '../common/app_colors.dart';
+import '../router/app_router.gr.dart';
 
 @RoutePage()
 class HomeScreen extends StatefulWidget {
@@ -51,7 +52,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   minWidth: MediaQuery.of(context).size.width * 0.9,
                 ),
                 child: OutlinedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    context.router.push(const ProcessRoute());
+                  },
                   style: OutlinedButton.styleFrom(
                     backgroundColor: AppColors.backgroundPrimary,
                     shape: RoundedRectangleBorder(
