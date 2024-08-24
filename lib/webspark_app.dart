@@ -11,6 +11,10 @@ class WebsparkApp extends StatelessWidget {
     return MaterialApp.router(
       title: 'Flutter Demo',
       theme: ThemeData(
+        appBarTheme: AppBarTheme(
+          backgroundColor: AppColors.backgroundPrimary,
+          iconTheme: const IconThemeData().copyWith(color: AppColors.white),
+        ),
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
         useMaterial3: true,
       ),

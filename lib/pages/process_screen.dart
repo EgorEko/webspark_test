@@ -22,7 +22,6 @@ class _ProcessScreenState extends State<ProcessScreen> {
     const end = Point(0, 3);
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: AppColors.backgroundPrimary,
         centerTitle: false,
         title: const Text(
           'Process screen',

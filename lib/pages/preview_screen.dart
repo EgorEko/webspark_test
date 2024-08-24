@@ -11,7 +11,6 @@ class PreviewScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: AppColors.backgroundPrimary,
         centerTitle: false,
         title: const Text(
           'Preview screen',
