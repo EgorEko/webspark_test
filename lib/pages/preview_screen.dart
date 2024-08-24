@@ -35,18 +35,24 @@ class PreviewScreen extends StatelessWidget {
             ),
             itemBuilder: (context, index) {
               return Card(
-                color: (items[index].x == state.result[0].x &&
-                        items[index].y == state.result[0].y)
+                color: (items[index].x == state.result['id']?[0].x &&
+                        items[index].y == state.result['id']?[0].y)
                     ? AppColors.start
-                    : (items[index].x == state.result[state.result.length -1].x &&
+                    : (items[index].x ==
+                                state
+                                    .result['id']?[state.result.length - 1].x &&
                             items[index].y ==
-                                state.result[state.result.length- 1].y)
+                                state
+                                    .result['id']
+                                        ?[state.result['id']!.length - 1]
+                                    .y)
                         ? AppColors.finish
-                        : state.result.contains(items[index])
+                        : state.result['id']!.contains(items[index])
                             ? AppColors.shortcut
                             : AppColors.white,
                 child: Center(
-                    child: Text('(${items[index].x}, ${items[index].y})'),),
+                  child: Text('(${items[index].x}, ${items[index].y})'),
+                ),
               );
             },
             itemCount: state.maxGridValue * (state.maxGridValue),

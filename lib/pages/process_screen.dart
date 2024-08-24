@@ -1,10 +1,7 @@
-import 'dart:math';
-
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../blocs/calculation_cubit/calculation_cubit.dart';
 import '../blocs/processing_cubit/processing_cubit.dart';
 import '../common/app_colors.dart';
 import '../router/app_router.gr.dart';
@@ -20,8 +17,6 @@ class ProcessScreen extends StatefulWidget {
 class _ProcessScreenState extends State<ProcessScreen> {
   @override
   Widget build(BuildContext context) {
-    const start = Point(0, 3);
-    const end = Point(3, 0);
     return Scaffold(
       appBar: AppBar(
         centerTitle: false,
@@ -53,16 +48,10 @@ class _ProcessScreenState extends State<ProcessScreen> {
             Center(
               child: ConstrainedBox(
                 constraints: BoxConstraints(
-                  minWidth: MediaQuery
-                      .of(context)
-                      .size
-                      .width * 0.9,
+                  minWidth: MediaQuery.of(context).size.width * 0.9,
                 ),
                 child: OutlinedButton(
                   onPressed: () {
-                    context
-                        .read<CalculationCubit>()
-                        .calculateShortcut(start, end);
                     context.router.push(const ResultListRoute());
                   },
                   style: OutlinedButton.styleFrom(

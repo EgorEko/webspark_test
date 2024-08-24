@@ -10,7 +10,7 @@ class MessageDto {
   factory MessageDto.fromJson(Json json) => _$MessageDtoFromJson(json);
   final bool error;
   final String message;
-  final List<dynamic> data;
+  final List<Map<String, dynamic>> data;
 
   Json toJson() => _$MessageDtoToJson(this);
 }
@@ -22,8 +22,8 @@ class VertexDto {
   factory VertexDto.fromJson(Json json) => _$VertexDtoFromJson(json);
   final String id;
   final List<String> field;
-  final Map<String, int> start;
-  final Map<String, int> end;
+  final Map<String, dynamic> start;
+  final Map<String, dynamic> end;
 
   Json toJson() => _$VertexDtoToJson(this);
 }
