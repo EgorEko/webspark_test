@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 
+import 'common/app_colors.dart';
 import 'router/app_router.dart';
 
 class WebsparkApp extends StatelessWidget {
   WebsparkApp({super.key});
 
   final _appRouter = AppRouter();
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(

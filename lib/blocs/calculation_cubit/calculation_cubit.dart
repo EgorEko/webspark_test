@@ -3,10 +3,12 @@ import 'dart:math';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../processing_cubit/processing_cubit.dart';
+
 part 'calculation_state.dart';
 
 class CalculationCubit extends Cubit<CalculationState> {
-  CalculationCubit() : super(const CalculationState({}, 0));
+  CalculationCubit() : super(const CalculationState([], 0));
 
   void calculateShortcut(Point start, Point end) {
     final maxStepCount = _calculateMaxStepCount(start, end);
@@ -28,10 +30,12 @@ class CalculationCubit extends Cubit<CalculationState> {
     }
   }
 
-  Map<int, Point> _calculateUpRight(Point start, Point end, int maxStepCount) {
-    final shortcut = <int, Point>{0: Point(start.x, start.y)};
+  List<Point> _calculateUpRight(Point start, Point end, int maxStepCount) {
+    final shortcut = <Point>[Point(start.x, start.y)];
     var x = start.x;
     var y = start.y;
+    final progress = ProcessingCubit();
+    progress.settingInitialValues(maxStepCount);
     for (var i = 0; i < maxStepCount; i++) {
       if (start.x + i < end.x) {
         x += 1;
@@ -39,14 +43,16 @@ class CalculationCubit extends Cubit<CalculationState> {
       if (start.y - i > end.y) {
         y -= 1;
       }
-      shortcut[i + 1] = Point(x, y);
+      shortcut.add(Point(x, y));
+      progress.updateProgress(i);
     }
+    progress.updateProgress(maxStepCount);
     print(shortcut);
     return shortcut;
   }
 
-  Map<int, Point> _calculateDownRight(Point start, Point end, int maxStepCount) {
-    final shortcut = <int, Point>{0: Point(start.x, start.y)};
+  List<Point> _calculateDownRight(Point start, Point end, int maxStepCount) {
+    final shortcut = <Point>[Point(start.x, start.y)];
     var x = start.x;
     var y = start.y;
     for (var i = 0; i < maxStepCount; i++) {
@@ -62,8 +68,8 @@ class CalculationCubit extends Cubit<CalculationState> {
     return shortcut;
   }
 
-  Map<int, Point> _calculateUpLeft(Point start, Point end, int maxStepCount) {
-    final shortcut = <int, Point>{0: Point(start.x, start.y)};
+  List<Point> _calculateUpLeft(Point start, Point end, int maxStepCount) {
+    final shortcut = <Point>[Point(start.x, start.y)];
     var x = start.x;
     var y = start.y;
     for (var i = 0; i < maxStepCount; i++) {
@@ -79,8 +85,8 @@ class CalculationCubit extends Cubit<CalculationState> {
     return shortcut;
   }
 
-  Map<int, Point> _calculateDownLeft(Point start, Point end, int maxStepCount) {
-    final shortcut = <int, Point>{0: Point(start.x, start.y)};
+  List<Point> _calculateDownLeft(Point start, Point end, int maxStepCount) {
+    final shortcut = <Point>[Point(start.x, start.y)];
     var x = start.x;
     var y = start.y;
     for (var i = 0; i < maxStepCount; i++) {
