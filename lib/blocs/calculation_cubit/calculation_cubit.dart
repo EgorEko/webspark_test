@@ -10,20 +10,28 @@ part 'calculation_state.dart';
 
 class CalculationCubit extends Cubit<CalculationState> {
   CalculationCubit(this.progress)
-      : super(const CalculationState([], [], 0, []));
+      : super(const CalculationState([], [], 0, [], []));
 
   final ProcessingCubit progress;
 
   void calculateShortcut(List<VertexDto> vertexes) {
     for (var vertex in vertexes) {
       if (vertex.start['x'] != null && vertex.start['y'] != null) {
-        final start =
+         final start =
             Point<int>(vertex.start['x']!.toInt(), vertex.start['y']!.toInt());
         final end =
             Point<int>(vertex.end['x']!.toInt(), vertex.end['y']!.toInt());
         final maxStepCount = _calculateMaxStepCount(start, end);
+        final blockedCellsList = <List<Point>>[];
+        if (state.blockedCells.isNotEmpty) {
+          blockedCellsList.addAll(state.blockedCells);
+        }
+        final blockedCells = _calculateBlockedCells(vertex);
+        blockedCellsList.add(blockedCells);
         if (start.x <= end.x && start.y >= end.y) {
-          final shortcut = _calculateUpRight(start, end, maxStepCount);
+          final shortcut =
+              _calculateUpRight(start, end, maxStepCount, blockedCells);
+          blockedCells.clear();
           var shortcutTotal = <List<Point>>[];
           if (state.result.isNotEmpty) {
             shortcutTotal.addAll(state.result);
@@ -42,7 +50,8 @@ class CalculationCubit extends Cubit<CalculationState> {
           );
         }
         if (start.x >= end.x && start.y >= end.y) {
-          final shortcut = _calculateUpLeft(start, end, maxStepCount);
+          final shortcut =
+              _calculateUpLeft(start, end, maxStepCount, blockedCells);
           final shortcutTotal = state.result;
           shortcutTotal.add(shortcut);
           var maxGridValue = <int>[];
@@ -58,7 +67,8 @@ class CalculationCubit extends Cubit<CalculationState> {
           );
         }
         if (start.x <= end.x && start.y <= end.y) {
-          final shortcut = _calculateDownRight(start, end, maxStepCount);
+          final shortcut =
+              _calculateDownRight(start, end, maxStepCount, blockedCells);
           var shortcutTotal = <List<Point>>[];
           if (state.result.isNotEmpty) {
             shortcutTotal.addAll(state.result);
@@ -77,7 +87,8 @@ class CalculationCubit extends Cubit<CalculationState> {
           );
         }
         if (start.x >= end.x && start.y <= end.y) {
-          final shortcut = _calculateDownLeft(start, end, maxStepCount);
+          final shortcut =
+              _calculateDownLeft(start, end, maxStepCount, blockedCells);
           var shortcutTotal = <List<Point>>[];
           if (state.result.isNotEmpty) {
             shortcutTotal.addAll(state.result);
@@ -129,19 +140,30 @@ class CalculationCubit extends Cubit<CalculationState> {
     Point start,
     Point end,
     int maxStepCount,
+    List<Point> blockedCells,
   ) {
     var shortcut = <Point>[];
     shortcut.add(Point(start.x, start.y));
     var x = start.x;
     var y = start.y;
     progress.settingInitialValues(maxStepCount);
-    for (var i = 0; i < maxStepCount; i++) {
+    var additionalStep = 0;
+    for (var i = 0; i < maxStepCount + additionalStep; i++) {
       if (start.x + i < end.x) {
         x += 1;
       }
-      if (start.y - i > end.y) {
-        y -= 1;
+      for (var k = 0; k < maxStepCount; k++) {
+        if (start.y - i + additionalStep > end.y) {
+          y = y - 1 + k;
+        }
+        if (!blockedCells.contains(Point(x, y))) {
+          break;
+        }
+        if (k > 0) {
+          additionalStep += 1;
+        }
       }
+
       shortcut.add(Point(x, y));
       progress.updateProgress(i);
     }
@@ -153,19 +175,30 @@ class CalculationCubit extends Cubit<CalculationState> {
     Point start,
     Point end,
     int maxStepCount,
+    List<Point> blockedCells,
   ) {
     var shortcut = <Point>[];
     shortcut.add(Point(start.x, start.y));
     var x = start.x;
     var y = start.y;
     progress.settingInitialValues(maxStepCount);
-    for (var i = 0; i < maxStepCount; i++) {
+    var additionalStep = 0;
+    for (var i = 0; i < maxStepCount + additionalStep; i++) {
       if (start.x + i < end.x) {
         x += 1;
       }
-      if (start.y + i < end.y) {
-        y += 1;
+      for (var k = 0; k < maxStepCount; k++) {
+        if (start.y - i + additionalStep > end.y) {
+          y = y + 1 + k;
+        }
+        if (!blockedCells.contains(Point(x, y))) {
+          break;
+        }
+        if (k > 0) {
+          additionalStep += 1;
+        }
       }
+
       shortcut.add(Point(x, y));
       progress.updateProgress(i);
     }
@@ -177,19 +210,30 @@ class CalculationCubit extends Cubit<CalculationState> {
     Point start,
     Point end,
     int maxStepCount,
+    List<Point> blockedCells,
   ) {
     var shortcut = <Point>[];
     shortcut.add(Point(start.x, start.y));
     var x = start.x;
     var y = start.y;
     progress.settingInitialValues(maxStepCount);
-    for (var i = 0; i < maxStepCount; i++) {
+    var additionalStep = 0;
+    for (var i = 0; i < maxStepCount + additionalStep; i++) {
       if (start.x - i > end.x) {
         x -= 1;
       }
-      if (start.y - i > end.y) {
-        y -= 1;
+      for (var k = 0; k < maxStepCount; k++) {
+        if (start.y - i + additionalStep > end.y) {
+          y = y - 1 + k;
+        }
+        if (!blockedCells.contains(Point(x, y))) {
+          break;
+        }
+        if (k > 0) {
+          additionalStep += 1;
+        }
       }
+
       shortcut.add(Point(x, y));
       progress.updateProgress(i);
     }
@@ -201,19 +245,30 @@ class CalculationCubit extends Cubit<CalculationState> {
     Point start,
     Point end,
     int maxStepCount,
+    List<Point> blockedCells,
   ) {
     var shortcut = <Point>[];
     shortcut.add(Point(start.x, start.y));
     var x = start.x;
     var y = start.y;
     progress.settingInitialValues(maxStepCount);
-    for (var i = 0; i < maxStepCount; i++) {
+    var additionalStep = 0;
+    for (var i = 0; i < maxStepCount + additionalStep; i++) {
       if (start.x - i > end.x) {
         x -= 1;
       }
-      if (start.y + i < end.y) {
-        y += 1;
+      for (var k = 0; k < maxStepCount; k++) {
+        if (start.y + i + additionalStep < end.y) {
+          y = y + 1 + k;
+        }
+        if (!blockedCells.contains(Point(x, y))) {
+          break;
+        }
+        if (k > 0) {
+          additionalStep += 1;
+        }
       }
+
       shortcut.add(Point(x, y));
       progress.updateProgress(i);
     }
@@ -221,10 +276,23 @@ class CalculationCubit extends Cubit<CalculationState> {
     return shortcut;
   }
 
-  int _calculateMaxStepCount(Point start, Point end) {
+  int _calculateMaxStepCount(Point<int> start, Point<int> end) {
     final maxX = (end.x - start.x).abs();
     final maxY = (end.y - start.y).abs();
     final maxStepCount = max(maxX, maxY);
     return maxStepCount.toInt();
+  }
+
+  List<Point> _calculateBlockedCells(VertexDto vertex) {
+    final field = vertex.field;
+    var blockedCells = <Point>[];
+    for (var i = 0; i < field.length; i++) {
+      for (var k = 0; k < field[i].length; k++) {
+        if (field[i][k] == 'X') {
+          blockedCells.add(Point(k, i));
+        }
+      }
+    }
+    return blockedCells;
   }
 }
