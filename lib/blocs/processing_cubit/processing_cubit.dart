@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -20,11 +18,5 @@ class ProcessingCubit extends Cubit<ProcessingState> {
       progress = 100;
     }
     emit(state.copyWith(progress: progress));
-  }
-
-  @override
-  void onChange(Change<ProcessingState> change) {
-    super.onChange(change);
-    log('${state.progress}');
   }
 }

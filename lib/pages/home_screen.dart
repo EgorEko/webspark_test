@@ -15,7 +15,20 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  TextEditingController controller = TextEditingController();
+  late TextEditingController pathController;
+
+  @override
+  void initState() {
+    pathController =
+        TextEditingController(text: 'https://flutter.webspark.dev');
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    pathController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +46,6 @@ class _HomeScreenState extends State<HomeScreen> {
           listener: (context, state) {
             if (state is DataExchangeSucceed) {
               context.router.push(ProcessRoute(vertexes: state.vertexes));
-
             }
           },
           builder: (context, state) {
@@ -53,7 +65,11 @@ class _HomeScreenState extends State<HomeScreen> {
                     SizedBox(
                       width: MediaQuery.of(context).size.width * 0.8,
                       child: TextFormField(
-                        controller: controller,
+                        controller: pathController,
+                        decoration: InputDecoration(
+                          errorText: _validate(pathController.text),
+                        ),
+
                       ),
                     ),
                   ],
@@ -72,7 +88,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     child: OutlinedButton(
                       onPressed: () {
-                        context.read<DataExchangeBloc>().loadData();
+                        context
+                            .read<DataExchangeBloc>()
+                            .loadData(pathController.text);
                       },
                       style: OutlinedButton.styleFrom(
                         backgroundColor: AppColors.backgroundPrimary,
@@ -98,4 +116,11 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
+
+  _validate(String value){
+      if (!value.contains('https://') || value.isEmpty) {
+        return 'Please, enter valid path';
+      }
+      return null;
+    }
 }

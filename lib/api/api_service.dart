@@ -7,8 +7,8 @@ import '../models/vertex.dart';
 class ApiService {
   ApiService();
 
-  Future<List<VertexDto>> fetchData() async {
-    var url = Uri.parse('https://flutter.webspark.dev/flutter/api');
+  Future<List<VertexDto>> fetchData(String path) async {
+    var url = Uri.parse('$path/flutter/api');
     final response = await http.get(
       url,
       headers: {'Content-Type': 'application/json'},

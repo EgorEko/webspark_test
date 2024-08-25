@@ -15,7 +15,7 @@ class DataExchangeBloc extends Bloc<DataExchangeEvent, DataExchangeState> {
         if(state is DataExchangeInitial){
           emit(DataExchangeLoading());
           ApiService apiService = ApiService();
-          final response = await apiService.fetchData();
+          final response = await apiService.fetchData(event.path);
           emit(DataExchangeSucceed(response));
         }
       }catch(e){
@@ -24,7 +24,7 @@ class DataExchangeBloc extends Bloc<DataExchangeEvent, DataExchangeState> {
     });
   }
 
-  void loadData() {
-    add(FetchDataExchangeEvent());
+  void loadData(String path) {
+    add(FetchDataExchangeEvent(path));
   }
 }
