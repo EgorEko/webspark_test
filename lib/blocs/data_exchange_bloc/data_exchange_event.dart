@@ -15,3 +15,14 @@ class FetchDataExchangeEvent extends DataExchangeEvent {
   @override
   List<Object> get props => [path];
 }
+
+class SendDataExchangeEvent extends DataExchangeEvent {
+  const SendDataExchangeEvent(this.result);
+
+  final List<dynamic> result;
+
+
+  @override
+  List<Object> get props => [result];
+}
+

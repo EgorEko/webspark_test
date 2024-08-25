@@ -20,6 +20,15 @@ class DataExchangeSucceed extends DataExchangeState {
   List<Object> get props => [vertexes];
 }
 
+class DataExchangeSendSucceed extends DataExchangeState {
+  const DataExchangeSendSucceed(this.message);
+
+  final MessageDto message;
+
+  @override
+  List<Object> get props => [message];
+}
+
 class DataExchangeFailed extends DataExchangeState {
   const DataExchangeFailed(this.error);
 

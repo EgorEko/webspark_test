@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../blocs/calculation_cubit/calculation_cubit.dart';
+import '../blocs/data_exchange_bloc/data_exchange_bloc.dart';
 import '../blocs/processing_cubit/processing_cubit.dart';
 import '../common/app_colors.dart';
 import '../models/vertex.dart';
@@ -50,24 +51,51 @@ class ProcessScreen extends StatelessWidget {
                 constraints: BoxConstraints(
                   minWidth: MediaQuery.of(context).size.width * 0.9,
                 ),
-                child: OutlinedButton(
-                  onPressed: () {
-                    context.router.push(const ResultListRoute());
+                child: BlocBuilder<CalculationCubit, CalculationState>(
+                  builder: (context, state) {
+                    var result = [];
+                    var steps = {};
+                    for (var i = 0; i < state.resultStrings.length; i++) {
+                      for (var k = 0; k < state.result[i].length; k++) {
+                        final step = {
+                          'x': state.result[i][k].x,
+                          'y': state.result[i][k].y,
+                        };
+                        steps[k] = step;
+                      }print(state.ids.length);
+                      var id = state.ids[i];
+                      var map = {
+                        'id': id,
+                        'result': {
+                          'steps': steps,
+                          'path': state.resultStrings[i],
+                        },
+                      };
+                      result.add(map);
+                      map.clear();
+                      steps.clear();
+                    }
+                    return OutlinedButton(
+                      onPressed: () {
+                        context.read<DataExchangeBloc>().sendData(result);
+                        context.router.push(const ResultListRoute());
+                      },
+                      style: OutlinedButton.styleFrom(
+                        backgroundColor: AppColors.backgroundPrimary,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        side: const BorderSide(
+                          width: 2,
+                          color: AppColors.cornerColor,
+                        ),
+                      ),
+                      child: const Text(
+                        'Send results to server',
+                        style: TextStyle(color: AppColors.black),
+                      ),
+                    );
                   },
-                  style: OutlinedButton.styleFrom(
-                    backgroundColor: AppColors.backgroundPrimary,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                    side: const BorderSide(
-                      width: 2,
-                      color: AppColors.cornerColor,
-                    ),
-                  ),
-                  child: const Text(
-                    'Send results to server',
-                    style: TextStyle(color: AppColors.black),
-                  ),
                 ),
               ),
             ),

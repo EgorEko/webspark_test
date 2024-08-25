@@ -10,7 +10,7 @@ part 'calculation_state.dart';
 
 class CalculationCubit extends Cubit<CalculationState> {
   CalculationCubit(this.progress)
-      : super(const CalculationState([], [], 0, [], []));
+      : super(const CalculationState([], [], 0, [], [], []));
 
   final ProcessingCubit progress;
 
@@ -28,6 +28,13 @@ class CalculationCubit extends Cubit<CalculationState> {
         }
         final blockedCells = _calculateBlockedCells(vertex);
         blockedCellsList.add(blockedCells);
+         final ids = <String> [];
+         if(state.ids.isNotEmpty){
+           ids.addAll(state.ids);
+         }
+         ids.add(vertex.id);
+         print(ids);
+         emit(state.copyWith(ids: ids));
         if (start.x <= end.x && start.y >= end.y) {
           final shortcut =
               _calculateUpRight(start, end, maxStepCount, blockedCells);

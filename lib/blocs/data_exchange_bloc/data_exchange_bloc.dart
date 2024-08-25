@@ -22,9 +22,25 @@ class DataExchangeBloc extends Bloc<DataExchangeEvent, DataExchangeState> {
         emit(DataExchangeFailed(e.toString()));
       }
     });
+    on<SendDataExchangeEvent>((event, emit) async {
+      try{
+        if(state is DataExchangeInitial){
+          emit(DataExchangeLoading());
+          ApiService apiService = ApiService();
+          final response = await apiService.send(event.result);
+          emit(DataExchangeSendSucceed(response));
+        }
+      }catch(e){
+        emit(DataExchangeFailed(e.toString()));
+      }
+    });
   }
 
   void loadData(String path) {
     add(FetchDataExchangeEvent(path));
+  }
+
+  void sendData(List<dynamic> result) {
+    add(SendDataExchangeEvent(result));
   }
 }

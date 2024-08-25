@@ -7,6 +7,7 @@ class CalculationState extends Equatable {
     this.index,
     this.resultStrings,
     this.blockedCells,
+    this.ids,
   );
 
   final List<List<Point>> result;
@@ -14,9 +15,10 @@ class CalculationState extends Equatable {
   final int index;
   final List<String> resultStrings;
   final List<List<Point>> blockedCells;
+  final List<String> ids;
 
   @override
-  List<Object?> get props => [result, maxGridValue, index, resultStrings];
+  List<Object?> get props => [result, maxGridValue, index, resultStrings, ids];
 
   CalculationState copyWith({
     List<List<Point>>? result,
@@ -24,6 +26,7 @@ class CalculationState extends Equatable {
     int? index,
     List<String>? resultStrings,
     List<List<Point>>? blockedCells,
+    List<String>? ids,
   }) {
     return CalculationState(
       result ?? this.result,
@@ -31,6 +34,7 @@ class CalculationState extends Equatable {
       index ?? this.index,
       resultStrings ?? this.resultStrings,
       blockedCells ?? this.blockedCells,
+      ids ?? this.ids,
     );
   }
 }
