@@ -17,6 +17,8 @@ class CalculationState extends Equatable {
   final List<List<Point>> blockedCells;
   final List<String> ids;
 
+  bool  get isReady => result.isNotEmpty;
+
   @override
   List<Object?> get props => [result, maxGridValue, index, resultStrings, ids];
 

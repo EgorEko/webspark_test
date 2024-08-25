@@ -38,8 +38,6 @@ class ApiService {
     );
 
     if (response.statusCode == 200) {
-      var data = jsonDecode(response.body.toString());
-      print(data);
       return MessageDto.fromJson(jsonDecode(response.body));
     } else {
       throw Exception('Failed to post user.');
