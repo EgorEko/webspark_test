@@ -33,7 +33,6 @@ class CalculationCubit extends Cubit<CalculationState> {
            ids.addAll(state.ids);
          }
          ids.add(vertex.id);
-         print(ids);
          emit(state.copyWith(ids: ids));
         if (start.x <= end.x && start.y >= end.y) {
           final shortcut =

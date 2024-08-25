@@ -62,7 +62,7 @@ class ProcessScreen extends StatelessWidget {
                           'y': state.result[i][k].y,
                         };
                         steps[k] = step;
-                      }print(state.ids.length);
+                      }
                       var id = state.ids[i];
                       var map = {
                         'id': id,
@@ -75,26 +75,29 @@ class ProcessScreen extends StatelessWidget {
                       map.clear();
                       steps.clear();
                     }
-                    return OutlinedButton(
-                      onPressed: () {
-                        context.read<DataExchangeBloc>().sendData(result);
-                        context.router.push(const ResultListRoute());
-                      },
-                      style: OutlinedButton.styleFrom(
-                        backgroundColor: AppColors.backgroundPrimary,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10.0),
+                    if (state.isReady) {
+                      return OutlinedButton(
+                        onPressed: () {
+                          context.read<DataExchangeBloc>().sendData(result);
+                          context.router.push(const ResultListRoute());
+                        },
+                        style: OutlinedButton.styleFrom(
+                          backgroundColor: AppColors.backgroundPrimary,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                          side: const BorderSide(
+                            width: 2,
+                            color: AppColors.cornerColor,
+                          ),
                         ),
-                        side: const BorderSide(
-                          width: 2,
-                          color: AppColors.cornerColor,
+                        child: const Text(
+                          'Send results to server',
+                          style: TextStyle(color: AppColors.black),
                         ),
-                      ),
-                      child: const Text(
-                        'Send results to server',
-                        style: TextStyle(color: AppColors.black),
-                      ),
-                    );
+                      );
+                    }
+                    return const SizedBox.shrink();
                   },
                 ),
               ),
