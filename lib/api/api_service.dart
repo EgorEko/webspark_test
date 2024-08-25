@@ -8,7 +8,7 @@ class ApiService {
   ApiService();
 
   Future<List<VertexDto>> fetchData(String path) async {
-    var url = Uri.parse('$path/flutter/api');
+    var url = Uri.parse(path);
     final response = await http.get(
       url,
       headers: {'Content-Type': 'application/json'},
@@ -34,7 +34,7 @@ class ApiService {
       headers: {
         'Content-Type': 'application/json',
       },
-      body:json.encoder.convert(resultList),
+      body: json.encoder.convert(resultList),
     );
 
     if (response.statusCode == 200) {

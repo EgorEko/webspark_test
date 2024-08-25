@@ -17,12 +17,14 @@ class FetchDataExchangeEvent extends DataExchangeEvent {
 }
 
 class SendDataExchangeEvent extends DataExchangeEvent {
-  const SendDataExchangeEvent(this.result);
+  const SendDataExchangeEvent(this.resultStrings, this.result, this.ids);
 
-  final List<dynamic> result;
+  final List<String> resultStrings;
+  final List<List<Point<num>>> result;
+  final List<String> ids;
 
 
   @override
-  List<Object> get props => [result];
+  List<Object> get props => [resultStrings, result, ids];
 }
 

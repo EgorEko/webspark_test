@@ -20,7 +20,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     pathController =
-        TextEditingController(text: 'https://flutter.webspark.dev');
+        TextEditingController(text: 'https://flutter.webspark.dev/flutter/api');
     super.initState();
   }
 
@@ -79,7 +79,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: Text(state.error),
                   ),
                 if (state is DataExchangeLoading)
-                  const CircularProgressIndicator(),
+                  const Center(child: CircularProgressIndicator()),
                 const Spacer(),
                 Center(
                   child: ConstrainedBox(
