@@ -9,6 +9,8 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:auto_route/auto_route.dart' as _i5;
+import 'package:flutter/material.dart' as _i6;
+import 'package:webspark_test/models/vertex.dart' as _i7;
 import 'package:webspark_test/pages/home_screen.dart' as _i1;
 import 'package:webspark_test/pages/preview_screen.dart' as _i2;
 import 'package:webspark_test/pages/process_screen.dart' as _i3;
@@ -54,10 +56,17 @@ class PreviewRoute extends _i5.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i3.ProcessScreen]
-class ProcessRoute extends _i5.PageRouteInfo<void> {
-  const ProcessRoute({List<_i5.PageRouteInfo>? children})
-      : super(
+class ProcessRoute extends _i5.PageRouteInfo<ProcessRouteArgs> {
+  ProcessRoute({
+    _i6.Key? key,
+    required List<_i7.VertexDto> vertexes,
+    List<_i5.PageRouteInfo>? children,
+  }) : super(
           ProcessRoute.name,
+          args: ProcessRouteArgs(
+            key: key,
+            vertexes: vertexes,
+          ),
           initialChildren: children,
         );
 
@@ -66,9 +75,29 @@ class ProcessRoute extends _i5.PageRouteInfo<void> {
   static _i5.PageInfo page = _i5.PageInfo(
     name,
     builder: (data) {
-      return const _i3.ProcessScreen();
+      final args = data.argsAs<ProcessRouteArgs>();
+      return _i3.ProcessScreen(
+        key: args.key,
+        vertexes: args.vertexes,
+      );
     },
   );
+}
+
+class ProcessRouteArgs {
+  const ProcessRouteArgs({
+    this.key,
+    required this.vertexes,
+  });
+
+  final _i6.Key? key;
+
+  final List<_i7.VertexDto> vertexes;
+
+  @override
+  String toString() {
+    return 'ProcessRouteArgs{key: $key, vertexes: $vertexes}';
+  }
 }
 
 /// generated route for

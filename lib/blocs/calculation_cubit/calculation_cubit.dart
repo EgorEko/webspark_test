@@ -9,47 +9,131 @@ import '../processing_cubit/processing_cubit.dart';
 part 'calculation_state.dart';
 
 class CalculationCubit extends Cubit<CalculationState> {
-  CalculationCubit() : super(const CalculationState({}, 0));
+  CalculationCubit(this.progress)
+      : super(const CalculationState([], [], 0, []));
+
+  final ProcessingCubit progress;
 
   void calculateShortcut(List<VertexDto> vertexes) {
     for (var vertex in vertexes) {
       if (vertex.start['x'] != null && vertex.start['y'] != null) {
-        final start = Point<int>(vertex.start['x']!.toInt(), vertex.start['y']!.toInt());
-        final end = Point<int>(vertex.end['x']!.toInt(), vertex.end['y']!.toInt());
-        final id = vertex.id;
+        final start =
+            Point<int>(vertex.start['x']!.toInt(), vertex.start['y']!.toInt());
+        final end =
+            Point<int>(vertex.end['x']!.toInt(), vertex.end['y']!.toInt());
         final maxStepCount = _calculateMaxStepCount(start, end);
         if (start.x <= end.x && start.y >= end.y) {
-          final shortcut = _calculateUpRight(start, end, maxStepCount, id);
-          emit(state.copyWith(result: shortcut, maxGridValue: shortcut.length));
+          final shortcut = _calculateUpRight(start, end, maxStepCount);
+          var shortcutTotal = <List<Point>>[];
+          if (state.result.isNotEmpty) {
+            shortcutTotal.addAll(state.result);
+          }
+          shortcutTotal.add(shortcut);
+          var maxGridValue = <int>[];
+          if (state.maxGridValue.isNotEmpty) {
+            maxGridValue.addAll(state.maxGridValue);
+          }
+          maxGridValue.add(shortcut.length);
+          emit(
+            state.copyWith(
+              result: shortcutTotal,
+              maxGridValue: maxGridValue,
+            ),
+          );
         }
         if (start.x >= end.x && start.y >= end.y) {
-          final shortcut = _calculateUpLeft(start, end, maxStepCount, id);
-          emit(state.copyWith(result: shortcut, maxGridValue: shortcut.length));
+          final shortcut = _calculateUpLeft(start, end, maxStepCount);
+          final shortcutTotal = state.result;
+          shortcutTotal.add(shortcut);
+          var maxGridValue = <int>[];
+          if (state.maxGridValue.isNotEmpty) {
+            maxGridValue.addAll(state.maxGridValue);
+          }
+          maxGridValue.add(shortcut.length);
+          emit(
+            state.copyWith(
+              result: shortcutTotal,
+              maxGridValue: maxGridValue,
+            ),
+          );
         }
         if (start.x <= end.x && start.y <= end.y) {
-          final shortcut = _calculateDownRight(start, end, maxStepCount, id);
-          emit(state.copyWith(result: shortcut, maxGridValue: shortcut.length));
+          final shortcut = _calculateDownRight(start, end, maxStepCount);
+          var shortcutTotal = <List<Point>>[];
+          if (state.result.isNotEmpty) {
+            shortcutTotal.addAll(state.result);
+          }
+          shortcutTotal.add(shortcut);
+          var maxGridValue = <int>[];
+          if (state.maxGridValue.isNotEmpty) {
+            maxGridValue.addAll(state.maxGridValue);
+          }
+          maxGridValue.add(shortcut.length);
+          emit(
+            state.copyWith(
+              result: shortcutTotal,
+              maxGridValue: maxGridValue,
+            ),
+          );
         }
         if (start.x >= end.x && start.y <= end.y) {
-          final shortcut = _calculateDownLeft(start, end, maxStepCount, id);
-          emit(state.copyWith(result: shortcut, maxGridValue: shortcut.length));
+          final shortcut = _calculateDownLeft(start, end, maxStepCount);
+          var shortcutTotal = <List<Point>>[];
+          if (state.result.isNotEmpty) {
+            shortcutTotal.addAll(state.result);
+          }
+          shortcutTotal.add(shortcut);
+          var maxGridValue = <int>[];
+          if (state.maxGridValue.isNotEmpty) {
+            maxGridValue.addAll(state.maxGridValue);
+          }
+          maxGridValue.add(shortcut.length);
+          emit(
+            state.copyWith(
+              result: shortcutTotal,
+              maxGridValue: maxGridValue,
+            ),
+          );
         }
       }
     }
+    _updateResultStrings();
   }
 
-  Map<String, List<Point>> _calculateUpRight(
+  void setupIndex(int index) {
+    emit(state.copyWith(index: index));
+  }
+
+  void _updateResultStrings() {
+    final result = state.result;
+    var resultString = StringBuffer();
+    final items = <String>[];
+    for (var i = 0; i < result.length; i++) {
+      for (var k = 0; k < result[i].length; k++) {
+        resultString.write('(');
+        resultString.write(result[i][k].x);
+        resultString.write(',');
+        resultString.write(result[i][k].y);
+        resultString.write(')');
+        if (k < result[i].length - 1) {
+          resultString.write('->');
+        }
+      }
+      items.add(resultString.toString());
+      resultString.clear();
+      emit(state.copyWith(resultStrings: items));
+    }
+  }
+
+  List<Point> _calculateUpRight(
     Point start,
     Point end,
     int maxStepCount,
-    String id,
   ) {
-    final shortcut = {
-      id: <Point>[Point(start.x, start.y)],
-    };
+    var shortcut = <Point>[];
+    shortcut.add(Point(start.x, start.y));
     var x = start.x;
     var y = start.y;
-    final progress = ProcessingCubit();
     progress.settingInitialValues(maxStepCount);
     for (var i = 0; i < maxStepCount; i++) {
       if (start.x + i < end.x) {
@@ -58,24 +142,23 @@ class CalculationCubit extends Cubit<CalculationState> {
       if (start.y - i > end.y) {
         y -= 1;
       }
-      shortcut[id]?.add(Point(x, y));
+      shortcut.add(Point(x, y));
       progress.updateProgress(i);
     }
     progress.updateProgress(maxStepCount);
     return shortcut;
   }
 
-  Map<String, List<Point>> _calculateDownRight(
+  List<Point> _calculateDownRight(
     Point start,
     Point end,
     int maxStepCount,
-    String id,
   ) {
-    final shortcut = {
-      id: <Point>[Point(start.x, start.y)],
-    };
+    var shortcut = <Point>[];
+    shortcut.add(Point(start.x, start.y));
     var x = start.x;
     var y = start.y;
+    progress.settingInitialValues(maxStepCount);
     for (var i = 0; i < maxStepCount; i++) {
       if (start.x + i < end.x) {
         x += 1;
@@ -83,22 +166,23 @@ class CalculationCubit extends Cubit<CalculationState> {
       if (start.y + i < end.y) {
         y += 1;
       }
-      shortcut[id]?.add(Point(x, y));
+      shortcut.add(Point(x, y));
+      progress.updateProgress(i);
     }
+    progress.updateProgress(maxStepCount);
     return shortcut;
   }
 
-  Map<String, List<Point>> _calculateUpLeft(
+  List<Point> _calculateUpLeft(
     Point start,
     Point end,
     int maxStepCount,
-    String id,
   ) {
-    final shortcut = {
-      id: <Point>[Point(start.x, start.y)],
-    };
+    var shortcut = <Point>[];
+    shortcut.add(Point(start.x, start.y));
     var x = start.x;
     var y = start.y;
+    progress.settingInitialValues(maxStepCount);
     for (var i = 0; i < maxStepCount; i++) {
       if (start.x - i > end.x) {
         x -= 1;
@@ -106,22 +190,23 @@ class CalculationCubit extends Cubit<CalculationState> {
       if (start.y - i > end.y) {
         y -= 1;
       }
-      shortcut[id]?.add(Point(x, y));
+      shortcut.add(Point(x, y));
+      progress.updateProgress(i);
     }
+    progress.updateProgress(maxStepCount);
     return shortcut;
   }
 
-  Map<String, List<Point>> _calculateDownLeft(
+  List<Point> _calculateDownLeft(
     Point start,
     Point end,
     int maxStepCount,
-    String id,
   ) {
-    final shortcut = {
-      id: <Point>[Point(start.x, start.y)],
-    };
+    var shortcut = <Point>[];
+    shortcut.add(Point(start.x, start.y));
     var x = start.x;
     var y = start.y;
+    progress.settingInitialValues(maxStepCount);
     for (var i = 0; i < maxStepCount; i++) {
       if (start.x - i > end.x) {
         x -= 1;
@@ -129,8 +214,10 @@ class CalculationCubit extends Cubit<CalculationState> {
       if (start.y + i < end.y) {
         y += 1;
       }
-      shortcut[id]?.add(Point(x, y));
+      shortcut.add(Point(x, y));
+      progress.updateProgress(i);
     }
+    progress.updateProgress(maxStepCount);
     return shortcut;
   }
 

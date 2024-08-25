@@ -24,30 +24,33 @@ class PreviewScreen extends StatelessWidget {
       body: BlocBuilder<CalculationCubit, CalculationState>(
         builder: (context, state) {
           var items = <Point>[];
-          for (var i = 0; i < state.maxGridValue; i++) {
-            for (var k = 0; k < state.maxGridValue; k++) {
+          for (var i = 0; i < state.maxGridValue[state.index]; i++) {
+            for (var k = 0; k < state.maxGridValue[state.index]; k++) {
               items.add(Point(k, i));
             }
           }
+
           return GridView.builder(
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: state.maxGridValue,
+              crossAxisCount: state.maxGridValue[state.index],
             ),
             itemBuilder: (context, index) {
               return Card(
-                color: (items[index].x == state.result['id']?[0].x &&
-                        items[index].y == state.result['id']?[0].y)
+                color: items[index].x == state.result[state.index][0].x &&
+                        items[index].y == state.result[state.index][0].y
                     ? AppColors.start
-                    : (items[index].x ==
+                    : items[index].x ==
                                 state
-                                    .result['id']?[state.result.length - 1].x &&
+                                    .result[state.index]
+                                        [state.result[state.index].length - 1]
+                                    .x &&
                             items[index].y ==
                                 state
-                                    .result['id']
-                                        ?[state.result['id']!.length - 1]
-                                    .y)
+                                    .result[state.index]
+                                        [state.result[state.index].length - 1]
+                                    .y
                         ? AppColors.finish
-                        : state.result['id']!.contains(items[index])
+                        : state.result[state.index].contains(items[index])
                             ? AppColors.shortcut
                             : AppColors.white,
                 child: Center(
@@ -55,7 +58,8 @@ class PreviewScreen extends StatelessWidget {
                 ),
               );
             },
-            itemCount: state.maxGridValue * (state.maxGridValue),
+            itemCount: state.maxGridValue[state.index] *
+                state.maxGridValue[state.index],
           );
         },
       ),

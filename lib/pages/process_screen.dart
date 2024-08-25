@@ -2,21 +2,21 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../blocs/calculation_cubit/calculation_cubit.dart';
 import '../blocs/processing_cubit/processing_cubit.dart';
 import '../common/app_colors.dart';
+import '../models/vertex.dart';
 import '../router/app_router.gr.dart';
 
 @RoutePage()
-class ProcessScreen extends StatefulWidget {
-  const ProcessScreen({super.key});
+class ProcessScreen extends StatelessWidget {
+  const ProcessScreen({super.key, required this.vertexes});
 
-  @override
-  State<ProcessScreen> createState() => _ProcessScreenState();
-}
+  final List<VertexDto> vertexes;
 
-class _ProcessScreenState extends State<ProcessScreen> {
   @override
   Widget build(BuildContext context) {
+    context.read<CalculationCubit>().calculateShortcut(vertexes);
     return Scaffold(
       appBar: AppBar(
         centerTitle: false,

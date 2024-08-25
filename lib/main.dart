@@ -6,11 +6,12 @@ import 'blocs/processing_cubit/processing_cubit.dart';
 import 'webspark_app.dart';
 
 void main() {
+  final process = ProcessingCubit();
   runApp(
     MultiBlocProvider(
       providers: [
-        BlocProvider(create: (_) => CalculationCubit()),
-        BlocProvider(create: (_) => ProcessingCubit()),
+        BlocProvider(create: (_) => process),
+        BlocProvider(create: (_) => CalculationCubit(process)),
         BlocProvider(create: (_) => DataExchangeBloc()),
       ],
       child: WebsparkApp(),

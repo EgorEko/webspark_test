@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../blocs/data_exchange_bloc/data_exchange_bloc.dart';
 import '../common/app_colors.dart';
+import '../router/app_router.gr.dart';
 
 @RoutePage()
 class HomeScreen extends StatefulWidget {
@@ -28,7 +29,13 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: Padding(
         padding: const EdgeInsets.only(top: 8, left: 8, right: 8, bottom: 30),
-        child: BlocBuilder<DataExchangeBloc, DataExchangeState>(
+        child: BlocConsumer<DataExchangeBloc, DataExchangeState>(
+          listener: (context, state) {
+            if (state is DataExchangeSucceed) {
+              context.router.push(ProcessRoute(vertexes: state.vertexes));
+
+            }
+          },
           builder: (context, state) {
             return Column(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -66,7 +73,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: OutlinedButton(
                       onPressed: () {
                         context.read<DataExchangeBloc>().loadData();
-
                       },
                       style: OutlinedButton.styleFrom(
                         backgroundColor: AppColors.backgroundPrimary,

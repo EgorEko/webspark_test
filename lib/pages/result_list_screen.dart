@@ -22,34 +22,20 @@ class ResultListScreen extends StatelessWidget {
       ),
       body: BlocBuilder<CalculationCubit, CalculationState>(
         builder: (context, state) {
-          final result = state.result['id'];
-          var resultString = StringBuffer();
-          final items = [];
-          if(result != null){
-            for (var i = 0; i < result.length; i++) {
-              resultString.write('(');
-              resultString.write(result[i].x);
-              resultString.write(',');
-              resultString.write(result[i].y);
-              resultString.write(')');
-              if (i < result.length - 1) {
-                resultString.write('->');
-              }
-              items.add(resultString);
-            }
-          }
+          final items = state.resultStrings;
           return ListView.builder(
             itemBuilder: (context, index) {
-              return Center(
-                child: TextFormField(
-                  readOnly: true,
-                  onTap: () {
-                    context.router.push(const PreviewRoute());
-                  },
-                  initialValue: resultString.toString(),
-                ),
+              return TextFormField(
+                readOnly: true,
+                onTap: () {
+                  context.read<CalculationCubit>().setupIndex(index);
+                  context.router.push(const PreviewRoute());
+                },
+                textAlign: TextAlign.center,
+                initialValue: items[index],
               );
             },
+            itemCount: items.length,
           );
         },
       ),
