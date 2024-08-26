@@ -27,14 +27,11 @@ class ApiService {
     return [];
   }
 
-  Future<MessageDto> send(List<dynamic> resultList) async {
+  Future<MessageDto> send(List<Map<String, dynamic>> resultList) async {
     var url = Uri.parse('https://flutter.webspark.dev/flutter/api');
     final response = await http.post(
       url,
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: json.encoder.convert(resultList),
+      body: Request(resultList).toJson(),
     );
 
     if (response.statusCode == 200) {

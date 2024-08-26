@@ -27,15 +27,15 @@ class DataExchangeBloc extends Bloc<DataExchangeEvent, DataExchangeState> {
     on<SendDataExchangeEvent>((event, emit) async {
       try {
         emit(DataExchangeLoading());
-        var result = [];
-        var steps = {};
+        var result = <Map<String, dynamic>> [];
+        var steps = <Map<String, dynamic>> [];
         for (var i = 0; i < event.resultStrings.length; i++) {
           for (var k = 0; k < event.result[i].length; k++) {
             final step = {
-              'x': event.result[i][k].x,
-              'y': event.result[i][k].y,
+              'x': event.result[i][k].x.toInt(),
+              'y': event.result[i][k].y.toInt(),
             };
-            steps[k] = step;
+            steps.add(step);
           }
           var id = event.ids[i];
           var map = {
@@ -46,7 +46,6 @@ class DataExchangeBloc extends Bloc<DataExchangeEvent, DataExchangeState> {
             },
           };
           result.add(map);
-          steps.clear();
         }
         ApiService apiService = ApiService();
         final response = await apiService.send(result);
@@ -61,8 +60,11 @@ class DataExchangeBloc extends Bloc<DataExchangeEvent, DataExchangeState> {
     add(FetchDataExchangeEvent(path));
   }
 
-  void sendData(List<String> resultStrings, List<List<Point<num>>> result,
-      List<String> ids) {
+  void sendData(
+    List<String> resultStrings,
+    List<List<Point<num>>> result,
+    List<String> ids,
+  ) {
     add(SendDataExchangeEvent(resultStrings, result, ids));
   }
 }
